@@ -37,6 +37,9 @@ body{background:var(--desk);color:var(--desk-ink);font-family:var(--f-body);
 .measure .pg{position:relative;width:420px;height:594px}
 .noflip .pg{position:relative;width:100%;max-width:560px;aspect-ratio:420/594;margin:0 auto;box-shadow:0 10px 30px rgba(0,0,0,.18)}
 .noflip .pg:not(.on){display:none}
+.noflip .pg.on{animation:einblenden .22s ease-out}
+@keyframes einblenden{from{opacity:.35;transform:translateX(8px)}to{opacity:1;transform:none}}
+.noflip #book{touch-action:pan-y}
 
 .run{display:flex;justify-content:space-between;align-items:baseline;gap:1em;font-family:var(--f-display);
   font-weight:600;font-size:.82em;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);
@@ -89,7 +92,8 @@ a{color:var(--red-deep)}
 .cover .eyebrow{font-family:var(--f-display);font-weight:700;font-size:1.05em;letter-spacing:.12em;text-transform:uppercase;color:var(--grau)}
 .cover .big{font-family:var(--f-display);font-weight:700;font-size:5.6em;line-height:.95;color:var(--red);letter-spacing:-.02em}
 .cover .yr{font-family:var(--f-display);font-weight:700;font-size:2.9em;line-height:1;color:var(--grau)}
-.cover .sub{margin:.6em 0 0;color:var(--grau);font-size:1.02em;max-width:22em}
+.cover .sub{margin:.6em 0 0;color:var(--grau);font-size:1.02em}
+.cover .sub span{display:block;white-space:nowrap}
 .cover .claim{position:absolute;left:0;bottom:24cqh;width:56cqw;background:var(--red);padding:4cqw 5cqw 4.4cqw 8cqw;z-index:1}
 .cover .claim img{width:100%;height:auto;display:block}
 .back .pc{background:var(--hell)}

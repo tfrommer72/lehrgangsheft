@@ -30,7 +30,7 @@ body{margin:0;font-size:14px}</style>
     </div>
   </div>
   <div class="stage"><div id="book"></div></div>
-  <div class="hint">Blättern mit den Pfeiltasten, per Wischen oder an der Seitenecke. Einträge im Inhalt und in der Terminübersicht springen direkt zum Lehrgang.</div>
+  <div class="hint">Blättern mit den Knöpfen, den Pfeiltasten oder per Wischen. Einträge im Inhalt und in der Terminübersicht springen direkt zum Lehrgang.</div>
 </div>
 <script type="application/json" id="daten"><?= json_fuer_html($daten) ?></script>
 <script src="/assets/qrcode.js"></script>

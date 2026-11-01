@@ -57,7 +57,7 @@
   page(1, 'cover', `${BB}<img class="adler" src="${A}adler.png" alt="">
    <div class="txt"><div class="eyebrow">Aus- und Fortbildung</div>
     <div class="big">Lehrgänge</div><div class="yr">${esc(JAHR)}</div>
-    <p class="sub">Seminarheft des Landesverbands Baden – mit Inhalten, Terminen, Voraussetzungen und QR-Code zur Anmeldung.</p></div>
+    <p class="sub"><span>Seminarheft des Landesverbands Baden</span><span>mit Inhalten, Terminen, Voraussetzungen</span><span>und QR-Code zur Anmeldung.</span></p></div>
    <div class="claim"><img src="${A}claim.svg" alt="Wasser lieben – Leben retten. DLRG"></div>`);
 
   // 2 Anmeldung
@@ -231,7 +231,10 @@
     const setHash = i => { try { history.replaceState(null, '', i ? '#seite-' + (i + 1) : location.pathname + location.search); } catch (e) { } };
     const startIdx = () => { const m = /^#seite-(\d+)$/.exec(location.hash); return m ? Math.min(els.length, Math.max(1, +m[1])) - 1 : 0; };
 
-    if (window.St && St.PageFlip) {
+    // Handy: keine Blätterbibliothek (sie blättert im Hochformat nicht rückwärts und blockiert das Scrollen),
+    // sondern Einzelseiten mit eigener Wischsteuerung.
+    const mobil = window.matchMedia('(max-width: 759px)').matches;
+    if (!mobil && window.St && St.PageFlip) {
       pf = new St.PageFlip(book, {
         width: 420, height: 594, size: 'stretch', minWidth: 260, maxWidth: 620, minHeight: 368, maxHeight: 877,
         showCover: true, usePortrait: true, autoSize: true, maxShadowOpacity: .35, mobileScrollSupport: false, flippingTime: 650,
@@ -249,9 +252,34 @@
     }
     const show = i => {
       i = Math.max(0, Math.min(els.length - 1, i));
-      if (pf) pf.flip(i); else { els.forEach((e, j) => e.classList.toggle('on', j === i)); cur = i; pgl.textContent = label(i); setHash(i); }
+      if (pf) pf.flip(i);
+      else {
+        els.forEach((e, j) => e.classList.toggle('on', j === i));
+        cur = i; pgl.textContent = label(i); setHash(i);
+        const oben = document.querySelector('.stage').getBoundingClientRect().top;
+        if (oben < 0) window.scrollBy({ top: oben - 8, behavior: 'smooth' });
+      }
     };
-    if (!pf) show(cur);
+    if (!pf) {
+      show(cur);
+      let x0 = null, y0 = 0;
+      book.addEventListener('touchstart', e => {
+        if (e.touches.length !== 1 || e.target.closest('a, button, select, input')) { x0 = null; return; }
+        x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+      }, { passive: true });
+      book.addEventListener('touchend', e => {
+        if (x0 === null) return;
+        const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+        x0 = null;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(cur + (dx < 0 ? 1 : -1));
+      }, { passive: true });
+    }
+    let breit = !mobil;
+    window.addEventListener('resize', () => {
+      // Wechsel zwischen Handy- und Computeransicht (z. B. Tablet drehen): Seite an gleicher Stelle neu aufbauen
+      const jetztBreit = !window.matchMedia('(max-width: 759px)').matches;
+      if (jetztBreit !== breit) { setHash(cur); location.reload(); }
+    });
     document.getElementById('prev').onclick = () => pf ? pf.flipPrev() : show(cur - 1);
     document.getElementById('next').onclick = () => pf ? pf.flipNext() : show(cur + 1);
     document.getElementById('toToc').onclick = () => show(2);
