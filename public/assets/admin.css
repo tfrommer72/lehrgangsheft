@@ -1,0 +1,59 @@
+@font-face{font-family:"DLRG Univers";font-weight:700;font-display:swap;src:url(univers-bold.woff2) format("woff2")}
+:root{--red:#e30613;--red-deep:#b0040f;--yellow:#ffed00;--grau:#575756;--hell:#eeeeee;--linie:#dcdcdc;--ink:#1d2229;--bg:#f6f6f6;--karte:#fff;
+  --ok:#1f7a3f;--ok-bg:#e3f3e8;--warn:#8a5a00;--warn-bg:#fff4cc;
+  --f-display:"DLRG Univers",Arial,sans-serif;--f-body:Arial,"Helvetica Neue",sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#16181b;--karte:#202328;--ink:#ecebe8;--linie:#3a3e45;--hell:#2b2f35;--grau:#a9abb0;--ok-bg:#163a24;--ok:#7fd49c;--warn-bg:#3b3214;--warn:#f0d07a;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--f-body)}
+.bb{background:var(--red);display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.6rem max(16px,env(safe-area-inset-right,0px)) .6rem max(16px,env(safe-area-inset-left,0px))}
+.bb span{font-family:var(--f-display);font-weight:700;color:var(--yellow);font-size:1.1rem}
+.bb img{height:1.2rem;width:auto}
+.kopf nav{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:flex-end;padding:.6rem max(16px,env(safe-area-inset-right,0px)) .6rem max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--linie);background:var(--karte)}
+.kopf nav form{margin:0}
+a{color:var(--red-deep)} @media (prefers-color-scheme:dark){a{color:#ff7a70}}
+main{max-width:1200px;margin:0 auto;padding:1.2rem max(16px,env(safe-area-inset-right,0px)) 3rem max(16px,env(safe-area-inset-left,0px));display:grid;gap:1.2rem}
+button{font:600 .92rem var(--f-body);border:1px solid var(--linie);background:var(--karte);color:var(--ink);border-radius:6px;padding:.5rem .9rem;cursor:pointer;min-height:38px}
+button:hover{border-color:var(--red)}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+button.primaer{background:var(--red);border-color:var(--red);color:#fff}
+button.primaer:hover{background:var(--red-deep)}
+button[disabled]{opacity:.6;cursor:progress}
+button.link{border:0;background:none;padding:0;min-height:0;color:inherit;text-decoration:underline;font-weight:400}
+.hinweis{margin:0;padding:.7rem 1rem;background:var(--ok-bg);color:var(--ok);border-radius:6px;font-weight:600}
+.lage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,2fr);gap:1rem;align-items:stretch}
+.zahl,.sync{background:var(--karte);border:1px solid var(--linie);border-radius:8px;padding:.9rem 1rem}
+.zahl b{display:block;font:700 2rem/1 var(--f-display);font-variant-numeric:tabular-nums}
+.zahl span{color:var(--grau);font-size:.85rem}
+.zahl.achtung{background:var(--warn-bg);border-color:transparent}.zahl.achtung b{color:var(--warn)}
+.sync form{margin:0 0 .4rem}.sync p{margin:0;color:var(--grau);font-size:.85rem}
+@media (max-width:900px){.lage{grid-template-columns:repeat(3,minmax(0,1fr))}.sync{grid-column:1/-1}}
+@media (max-width:520px){.lage{grid-template-columns:1fr}}
+.werkzeuge{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin-bottom:.6rem}
+.filter{display:flex;gap:0;margin-right:auto}
+.filter button{border-radius:0;margin-left:-1px}.filter button:first-child{border-radius:6px 0 0 6px}.filter button:last-child{border-radius:0 6px 6px 0}
+.filter button.an{background:var(--ink);color:var(--karte);border-color:var(--ink)}
+.tabelle{overflow-x:auto;background:var(--karte);border:1px solid var(--linie);border-radius:8px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font:700 .75rem var(--f-display);letter-spacing:.06em;text-transform:uppercase;color:var(--grau);padding:.6rem .7rem;border-bottom:2px solid var(--ink)}
+td{padding:.55rem .7rem;border-bottom:1px solid var(--linie);vertical-align:top}
+tr[data-neu="1"] td{background:color-mix(in srgb,var(--warn-bg) 55%,transparent)}
+td.mitte{text-align:center}td.mitte input{width:1.3rem;height:1.3rem;accent-color:var(--red)}
+td.zahlen{font-variant-numeric:tabular-nums;white-space:nowrap}
+td small,.grau{color:var(--grau)}
+td label{cursor:pointer}
+td select{max-width:15rem;font:inherit;font-size:.85rem;padding:.3rem;border:1px solid var(--linie);border-radius:5px;background:var(--karte);color:var(--ink)}
+td.links a{display:block;font-size:.85rem}
+.marke{display:inline-block;background:var(--yellow);color:#1d2229;font:700 .7rem var(--f-display);padding:.1rem .4rem;border-radius:3px;text-transform:uppercase;letter-spacing:.05em}
+.fuss{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;color:var(--grau);font-size:.85rem}
+.block{background:var(--karte);border:1px solid var(--linie);border-radius:8px;padding:.8rem 1rem}
+.block summary{cursor:pointer;font-weight:600}
+table.log td{font-size:.85rem}
+body.login{display:grid;place-items:center;min-height:100vh;padding:16px}
+.karte{background:var(--karte);border:1px solid var(--linie);border-radius:8px;width:min(380px,100%);overflow:hidden;display:grid;gap:.5rem;padding-bottom:1.2rem}
+.karte>*:not(.bb){margin-left:1.2rem;margin-right:1.2rem}
+.karte h1{font:700 1.3rem var(--f-display);color:var(--red);margin-top:1rem;margin-bottom:.4rem}
+.karte label{font-weight:600;font-size:.9rem}
+.karte input{font:inherit;padding:.55rem .6rem;border:1px solid var(--linie);border-radius:6px;background:var(--karte);color:var(--ink)}
+.karte button{margin-top:.6rem;background:var(--red);border-color:var(--red);color:#fff}
+.fehler{color:var(--red-deep);font-weight:600;margin:0}

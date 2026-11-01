@@ -1,0 +1,6 @@
+/config.php
+/storage/*
+!/storage/.gitkeep
+!/storage/pdf/
+/storage/pdf/*
+!/storage/pdf/.gitkeep

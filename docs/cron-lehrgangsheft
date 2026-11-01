@@ -1,0 +1,5 @@
+# /etc/cron.d/lehrgangsheft
+# Täglich um 05:17 Uhr Lehrgänge von baden.dlrg.de holen und das Heft-PDF vorbereiten.
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+17 5 * * * www-data /usr/bin/php /var/www/lehrgangsheft/bin/sync.php >> /var/www/lehrgangsheft/storage/sync.log 2>&1

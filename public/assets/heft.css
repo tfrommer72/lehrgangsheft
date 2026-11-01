@@ -1,0 +1,151 @@
+@font-face{font-family:"DLRG Univers";font-weight:700;font-style:normal;font-display:block;src:url(univers-bold.woff2) format("woff2")}
+/* Layout: ein gedrucktes A5-Heft auf dem Tisch – Doppelseiten am Desktop, Einzelseite am Handy.
+   Die Seiten sind immer Papier (eigene Palette), nur der Tisch folgt dem Theme. */
+:root{
+  --red:#e30613; --red-deep:#b0040f; --yellow:#ffed00;
+  --paper:#ffffff; --ink:#1d2229; --ink-soft:#575756; --blue:#0069b4; --blue-deep:#004f8a; --grau:#575756; --hell:#eeeeee; --rule:#e6e1dc; --tint:#f6f3f0;
+  --ok:#1f7a3f; --ok-bg:#e3f3e8; --soon:#8a5a00; --soon-bg:#fff4cc; --full:#6b6f78; --full-bg:#eceef1;
+  --desk:#ece8e4; --desk-ink:#2a2e35; --desk-soft:#6c7079; --btn:#ffffff; --btn-line:#d6d0ca;
+  --f-display:"DLRG Univers",Arimo,Arial,sans-serif;
+  --f-body:Arimo,Arial,"Helvetica Neue",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --desk:#17191d; --desk-ink:#e9e6e2; --desk-soft:#9a9ea7; --btn:#24272d; --btn-line:#3a3e46; color-scheme:dark}}
+:root[data-theme="dark"]{--desk:#17191d; --desk-ink:#e9e6e2; --desk-soft:#9a9ea7; --btn:#24272d; --btn-line:#3a3e46; color-scheme:dark}
+
+body{background:var(--desk);color:var(--desk-ink);font-family:var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 28px}
+.shell{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.bar h1{font-family:var(--f-display);font-weight:700;font-size:1.15rem;letter-spacing:.01em;margin:0;text-wrap:balance}
+.bar p{margin:0;color:var(--desk-soft);font-size:.86rem}
+.nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nav button{font:600 .9rem var(--f-body);color:var(--desk-ink);background:var(--btn);border:1px solid var(--btn-line);
+  border-radius:8px;padding:.45rem .8rem;cursor:pointer;min-height:38px}
+.nav button:hover{border-color:var(--red)}
+.nav button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.nav .pgl{font-variant-numeric:tabular-nums;color:var(--desk-soft);font-size:.88rem;min-width:9.5em;text-align:center}
+.stage{width:100%;max-width:max(560px,min(1240px,calc((100dvh - 170px) * 1.414)));margin:0 auto}
+#book{width:100%}
+.hint{color:var(--desk-soft);font-size:.8rem;text-align:center}
+
+/* ---------- Seite ---------- */
+.pg{background:var(--paper);color:var(--ink);overflow:hidden}
+.pg .box{position:absolute;inset:0;container-type:size}
+.pc{--k:1;position:absolute;inset:0;font-size:calc(2.45cqw * var(--k));line-height:1.38;
+  padding:7.5cqw 7.5cqw 9cqw;display:flex;flex-direction:column;gap:.9em;overflow:hidden}
+.measure .pg{position:relative;width:420px;height:594px}
+.noflip .pg{position:relative;width:100%;max-width:560px;aspect-ratio:420/594;margin:0 auto;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.noflip .pg:not(.on){display:none}
+
+.run{display:flex;justify-content:space-between;align-items:baseline;gap:1em;font-family:var(--f-display);
+  font-weight:600;font-size:.82em;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);
+  border-bottom:.18em solid var(--red);padding-bottom:.45em}
+.run b{color:var(--red);font-weight:700}
+.foot{position:absolute;left:7.5cqw;right:7.5cqw;bottom:3.6cqw;display:flex;justify-content:space-between;
+  font-size:calc(2cqw * var(--k,1));color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.pg.l .foot{flex-direction:row}
+.pg.r .foot{flex-direction:row-reverse}
+.foot b{color:var(--ink);font-weight:700}
+
+h2.t{font-family:var(--f-display);font-weight:700;font-size:1.85em;color:var(--red);line-height:1.02;margin:0;text-wrap:balance;letter-spacing:-.005em}
+.when{font-family:var(--f-display);font-weight:700;font-size:1.2em;color:var(--ink);line-height:1.1;font-variant-numeric:tabular-nums}
+.where{color:var(--ink-soft);font-weight:600;margin-top:-.4em}
+.pill{display:inline-flex;align-self:flex-start;align-items:center;gap:.4em;font-weight:700;font-size:.82em;padding:.28em .7em;border-radius:99px}
+.pill::before{content:"";width:.55em;height:.55em;border-radius:50%;background:currentColor}
+.s-ok{color:var(--ok);background:var(--ok-bg)} .s-soon{color:var(--soon);background:var(--soon-bg)}
+.s-full{color:var(--full);background:var(--full-bg)}
+.sec h3{font-family:var(--f-display);font-weight:700;font-size:.92em;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--red-deep);margin:0 0 .3em}
+.sec p{margin:0}
+.sec small{color:var(--ink-soft)}
+ul.b{list-style:none;margin:0;padding:0;display:grid;gap:.18em}
+ul.b li{position:relative;padding-left:1em}
+ul.b li::before{content:"";position:absolute;left:0;top:.52em;width:.42em;height:.42em;background:var(--red)}
+ul.two{grid-template-columns:1fr 1fr;column-gap:1.2em}
+.note{background:var(--tint);padding:.7em .85em;font-size:.9em;white-space:pre-line;border-left:.25em solid var(--yellow)}
+dl.facts{display:grid;grid-template-columns:auto 1fr;gap:.25em 1em;margin:0}
+dl.facts dt{font-weight:700;color:var(--ink-soft);font-size:.9em}
+dl.facts dd{margin:0}
+ol.term{list-style:none;margin:0;padding:0;display:grid;gap:.2em;font-variant-numeric:tabular-nums}
+ol.term li{display:grid;grid-template-columns:1.6em 1fr;gap:.3em}
+ol.term li span{font-family:var(--f-display);font-weight:700;color:var(--red);font-size:.9em}
+.qr{margin-top:auto;display:grid;grid-template-columns:30% 1fr;gap:1.1em;align-items:center;
+  border:.14em solid var(--ink);padding:.9em}
+.qr svg{width:100%;height:auto;display:block}
+.qr strong{display:block;font-family:var(--f-display);font-size:1.2em;line-height:1.05;margin-bottom:.2em}
+.qr p{margin:0;font-size:.88em}
+.qr a{color:var(--red-deep);word-break:break-all;font-size:.82em}
+a{color:var(--red-deep)}
+
+/* Cover & Rückseite nach DLRG-CD: rote Bauchbinde oben ("LV Baden" + Wortmarke), Adler im Anschnitt, Claim-Feld, DLRG-Wasserzeichen */
+.cover .pc,.back .pc{padding:0;gap:0;background:var(--paper)}
+.bb{position:absolute;left:0;right:0;top:7cqh;height:6.6cqw;background:var(--red);display:flex;align-items:center;justify-content:space-between;padding:0 5.5cqw;z-index:2}
+.bb span{font-family:var(--f-display);font-weight:700;color:var(--yellow);font-size:3.6cqw;line-height:1}
+.bb img{height:3.9cqw;width:auto;display:block;max-width:none}
+.cover .adler{position:absolute;right:-31cqw;bottom:-3cqh;width:104cqw;height:auto;max-width:none;pointer-events:none;opacity:.17}
+.cover .txt{position:relative;z-index:1;padding:31cqh 8cqw 0;display:flex;flex-direction:column;gap:.5em;max-width:78%}
+.cover .eyebrow{font-family:var(--f-display);font-weight:700;font-size:1.05em;letter-spacing:.12em;text-transform:uppercase;color:var(--grau)}
+.cover .big{font-family:var(--f-display);font-weight:700;font-size:5.6em;line-height:.95;color:var(--red);letter-spacing:-.02em}
+.cover .yr{font-family:var(--f-display);font-weight:700;font-size:2.9em;line-height:1;color:var(--grau)}
+.cover .sub{margin:.6em 0 0;color:var(--grau);font-size:1.02em;max-width:22em}
+.cover .claim{position:absolute;left:0;bottom:8cqh;width:56cqw;background:var(--red);padding:4cqw 5cqw 4.4cqw 8cqw;z-index:1}
+.cover .claim img{width:100%;height:auto;display:block}
+.back .pc{background:var(--hell)}
+.back .top{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:1em;padding:24cqh 8cqw 22cqh}
+.back .big{font-family:var(--f-display);font-weight:700;font-size:2.8em;line-height:1;color:var(--red);text-wrap:balance}
+.back .qrb{width:40%;border:.14em solid var(--ink);padding:.7em;background:#fff}
+.back .qrb svg{width:100%;display:block}
+.back p{margin:0;font-size:1.05em;color:var(--grau)}
+.back p b{color:var(--ink)}
+.back .wm{position:absolute;right:5.5cqw;bottom:5cqh;width:52cqw;opacity:.75}
+.back .wm img{width:100%;display:block}
+/* Übersichten */
+.toc{display:grid;gap:.9em}
+.toc h3{font-family:var(--f-display);font-size:1.1em;margin:0 0 .25em;color:var(--red-deep);letter-spacing:.04em;text-transform:uppercase}
+.toc a{display:grid;grid-template-columns:1fr auto;gap:.8em;color:var(--ink);text-decoration:none;padding:.12em 0;border-bottom:1px dotted var(--rule)}
+.toc a:hover span:first-child{color:var(--red)}
+.toc a span:last-child{font-variant-numeric:tabular-nums;font-weight:700}
+table.ov{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.92em}
+table.ov th{text-align:left;font-family:var(--f-display);letter-spacing:.06em;text-transform:uppercase;font-size:.85em;color:var(--ink-soft);
+  border-bottom:.14em solid var(--ink);padding:.25em .3em}
+table.ov td{border-bottom:1px solid var(--rule);padding:.32em .3em;vertical-align:top}
+table.ov td.m{font-family:var(--f-display);font-weight:700;color:var(--red);font-size:1em;padding-top:.7em;border-bottom:none}
+table.ov a{color:var(--ink);text-decoration:none;font-weight:600}
+table.ov a:hover{color:var(--red)}
+table.ov .n{color:var(--ink-soft);font-size:.86em;display:block;font-weight:400}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:.75em;counter-reset:s}
+.steps li{display:grid;grid-template-columns:2.1em 1fr;gap:.6em;counter-increment:s}
+.steps li::before{content:counter(s);font-family:var(--f-display);font-weight:700;font-size:1.6em;line-height:1;color:var(--red)}
+.steps b{display:block}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:1em}
+.mini figure{margin:0;display:grid;gap:.35em}
+.mini svg{width:100%;display:block}
+.mini figcaption{font-size:.85em;font-weight:600}
+.lead{font-size:1.12em}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+/* Werkzeugleiste: PDF und Sprungliste */
+.nav a.btn,.nav select{font:600 .9rem var(--f-body);color:var(--desk-ink);background:var(--btn);border:1px solid var(--btn-line);
+  border-radius:8px;padding:.45rem .8rem;min-height:38px;text-decoration:none;display:inline-flex;align-items:center}
+.nav select{max-width:16rem;padding-right:.4rem}
+.nav a.btn:hover,.nav select:hover{border-color:var(--red)}
+.nav a.btn.rot{background:var(--red);border-color:var(--red);color:#fff}
+.aktionen{display:flex;align-items:center;justify-content:space-between;gap:.8em;flex-wrap:wrap}
+.anmelden{display:inline-block;background:var(--red);color:#fff;font-family:var(--f-display);font-weight:700;font-size:1.05em;
+  text-decoration:none;padding:.55em 1.1em;border-radius:.25em}
+.anmelden:hover{background:var(--red-deep)}
+.anmelden:focus-visible{outline:.15em solid var(--ink);outline-offset:.15em}
+.anmelden.spaeter{background:var(--hell);color:var(--ink);font-size:.95em}
+.kurs-pdf{font-size:.85em;font-weight:700;color:var(--red-deep);text-decoration:none}
+.leer{max-width:40rem;margin:10vh auto;text-align:center;color:var(--desk-soft)}
+
+/* Druck (PDF über Chromium): A5-Seiten untereinander, Sprunglinks bleiben als PDF-Links erhalten */
+@page{size:148mm 210mm;margin:0}
+body.druck{background:#fff;padding:0}
+body.druck .shell{display:block;max-width:none}
+body.druck .bar,body.druck .hint,body.druck .nur-web{display:none!important}
+body.druck .stage{max-width:none}
+body.druck .pg{position:relative;width:148mm;height:210mm;break-after:page;page-break-after:always;box-shadow:none;margin:0}
+body.druck .pg:last-child{break-after:auto;page-break-after:auto}
+@media print{.bar,.hint,.nur-web{display:none!important}}
