@@ -6,10 +6,10 @@ require __DIR__ . '/../src/bootstrap.php';
 $pfad = '/' . trim(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/', '/');
 $methode = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
-function ansicht(string $name, array $vars = []): void
+function ansicht(string $__ansicht, array $vars = []): void
 {
     extract($vars, EXTR_SKIP);
-    require APP_ROOT . '/views/' . $name . '.php';
+    require APP_ROOT . '/views/' . $__ansicht . '.php';
 }
 
 function weiter(string $ziel): never
@@ -137,7 +137,7 @@ try {
         }
         $b = Benutzer::tokenPruefen($token);
         header('Referrer-Policy: no-referrer');
-        ansicht('passwort-setzen', ['token' => $token, 'gueltig' => (bool)$b, 'name' => $b['name'] ?? '', 'fehler' => $fehler]);
+        ansicht('passwort-setzen', ['token' => $token, 'gueltig' => (bool)$b, 'name' => $b['name'] ?? '', 'email' => $b['email'] ?? '', 'fehler' => $fehler]);
         exit;
     }
     if ($pfad === '/admin/logout' && $methode === 'POST') {

@@ -1,4 +1,4 @@
-<?php /** @var string $token @var bool $gueltig @var string $name @var ?string $fehler */ ?><!doctype html>
+<?php /** @var string $token @var bool $gueltig @var string $name @var string $email @var ?string $fehler */ ?><!doctype html>
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -23,6 +23,8 @@
   <?php if ($fehler): ?><p class="fehler" role="alert"><?= e($fehler) ?></p><?php endif; ?>
   <input type="hidden" name="csrf" value="<?= e($_SESSION['csrf']) ?>">
   <input type="hidden" name="token" value="<?= e($token) ?>">
+  <label for="konto">Dein Zugang</label>
+  <input id="konto" name="konto" type="email" value="<?= e($email) ?>" autocomplete="username" readonly>
   <label for="pw1">Neues Passwort</label>
   <input id="pw1" name="pw1" type="password" autocomplete="new-password" minlength="<?= Benutzer::MIN_LAENGE ?>" required autofocus>
   <label for="pw2">Passwort wiederholen</label>

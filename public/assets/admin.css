@@ -63,7 +63,8 @@ h2{font:700 1.15rem var(--f-display);color:var(--red);margin:0 0 .3rem}
 .ok{color:var(--ok);background:var(--ok-bg);padding:.6rem .7rem;border-radius:6px;margin:0;font-weight:600;font-size:.9rem}
 .fehlerbox{background:#fde7e7;color:var(--red-deep)}
 @media (prefers-color-scheme:dark){.fehlerbox{background:#3b1717;color:#ffb3ad}}
-.karte .text{margin:0;color:var(--grau);font-size:.92rem}
+.karte .text{margin:0 1.2rem;color:var(--grau);font-size:.92rem}
+.karte input[readonly]{background:var(--hell);color:var(--grau)}
 .karte .klein{font-size:.88rem;justify-self:start}
 .knopf{display:inline-block;background:var(--red);color:#fff!important;text-decoration:none;padding:.55rem .9rem;border-radius:6px;font-weight:600;justify-self:start}
 form.zeile{display:flex;flex-wrap:wrap;gap:.8rem;align-items:flex-end;margin-top:.6rem}
