@@ -12,6 +12,8 @@ require __DIR__ . '/Sync.php';
 require __DIR__ . '/Heft.php';
 require __DIR__ . '/Pdf.php';
 require __DIR__ . '/Hintergrund.php';
+require __DIR__ . '/Benutzer.php';
+require __DIR__ . '/Mailer.php';
 
 function config(?string $key = null): mixed
 {

@@ -20,7 +20,21 @@ return [
     // Chromium für den PDF-Export
     'chromium' => '/usr/bin/chromium',
 
-    // Admins: Benutzername => Passwort-Hash (erzeugen mit: php bin/passwort.php)
+    // Mailversand für Einladungen und „Passwort vergessen“
+    //   IONOS:            host smtp.ionos.de, port 587, verschluesselung 'tls'
+    //   Google Workspace: host smtp.gmail.com, port 587, 'tls', Passwort = App-Passwort
+    'mail' => [
+        'host'             => 'smtp.ionos.de',
+        'port'             => 587,
+        'verschluesselung' => 'tls',          // 'tls' (STARTTLS), 'ssl' (Port 465) oder 'none'
+        'benutzer'         => '',             // meist die vollständige E-Mail-Adresse des Postfachs
+        'passwort'         => '',
+        'absender'         => '',             // z. B. lehrgangsheft@deine-domain.de
+        'absender_name'    => 'Lehrgangsheft DLRG LV Baden',
+    ],
+
+    // Notfallzugang ohne E-Mail: Benutzername => Passwort-Hash (erzeugen mit: php bin/passwort.php).
+    // Die eigentlichen Admins werden im Admin-Bereich unter „Admins“ angelegt.
     'admins' => [
         // 'torsten' => '$2y$12$....',
     ],

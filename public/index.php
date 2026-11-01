@@ -87,17 +87,57 @@ try {
         $fehler = null;
         if ($methode === 'POST') {
             csrf_pruefen();
-            $name = trim((string)($_POST['name'] ?? ''));
-            $hash = config('admins')[$name] ?? null;
-            if ($hash && password_verify((string)($_POST['passwort'] ?? ''), $hash)) {
+            $b = Benutzer::anmelden((string)($_POST['email'] ?? ''), (string)($_POST['passwort'] ?? ''));
+            if ($b) {
                 session_regenerate_id(true);
-                $_SESSION['admin'] = $name;
+                $_SESSION['admin'] = $b['name'];
+                $_SESSION['benutzer_id'] = $b['id'];
                 weiter('/admin');
             }
             sleep(1);
-            $fehler = 'Name oder Passwort stimmt nicht.';
+            $fehler = 'E-Mail-Adresse oder Passwort stimmt nicht.';
         }
-        ansicht('login', ['fehler' => $fehler]);
+        ansicht('login', ['fehler' => $fehler, 'hinweis' => $_SESSION['login_hinweis'] ?? null]);
+        unset($_SESSION['login_hinweis']);
+        exit;
+    }
+    if ($pfad === '/admin/passwort-vergessen') {
+        sitzung();
+        if ($methode === 'POST') {
+            csrf_pruefen();
+            try {
+                Benutzer::passwortVergessen((string)($_POST['email'] ?? ''));
+            } catch (Throwable $e) {
+                error_log('[lehrgangsheft] Passwort-vergessen-Mail: ' . $e->getMessage());
+            }
+            sleep(1);
+            // Immer dieselbe Antwort – verrät nicht, ob es die Adresse gibt
+            $_SESSION['login_hinweis'] = 'Falls es zu dieser Adresse einen Zugang gibt, ist eine E-Mail mit einem Link unterwegs. Der Link gilt eine Stunde.';
+            weiter('/admin/login');
+        }
+        ansicht('passwort-vergessen');
+        exit;
+    }
+    if ($pfad === '/admin/passwort-setzen') {
+        sitzung();
+        $token = (string)($_GET['token'] ?? $_POST['token'] ?? '');
+        $fehler = null;
+        if ($methode === 'POST') {
+            csrf_pruefen();
+            try {
+                $b = Benutzer::passwortSetzen($token, (string)($_POST['pw1'] ?? ''), (string)($_POST['pw2'] ?? ''));
+                session_regenerate_id(true);
+                $_SESSION['admin'] = $b['name'];
+                $_SESSION['benutzer_id'] = $b['id'];
+                $_SESSION['hinweis'] = 'Dein Passwort ist gespeichert. Ab jetzt meldest du dich mit ' . $b['email'] . ' an.';
+                weiter('/admin');
+            } catch (InvalidArgumentException $e) {
+                $fehler = $e->getMessage();
+            }
+        }
+        $b = Benutzer::tokenPruefen($token);
+        header('Referrer-Policy: no-referrer');
+        ansicht('passwort-setzen', ['token' => $token, 'gueltig' => (bool)$b, 'name' => $b['name'] ?? '', 'fehler' => $fehler]);
         exit;
     }
     if ($pfad === '/admin/logout' && $methode === 'POST') {
@@ -133,6 +173,49 @@ try {
                 ? 'Aktualisierung läuft. Sie dauert etwa ein bis zwei Minuten – diese Seite lädt sich selbst neu.'
                 : 'Eine Aktualisierung läuft bereits.';
             weiter('/admin');
+        }
+
+        if ($pfad === '/admin/admins' && $methode === 'GET') {
+            $hinweis = $_SESSION['hinweis'] ?? null; $fehler = $_SESSION['fehler'] ?? null;
+            unset($_SESSION['hinweis'], $_SESSION['fehler']);
+            ansicht('admins', ['liste' => Benutzer::alle(), 'hinweis' => $hinweis, 'fehler' => $fehler,
+                'csrf' => $_SESSION['csrf'], 'admin' => admin(), 'ich' => $_SESSION['benutzer_id'] ?? null]);
+            exit;
+        }
+        if ($pfad === '/admin/admins/anlegen' && $methode === 'POST') {
+            csrf_pruefen();
+            try {
+                $id = Benutzer::anlegen((string)($_POST['name'] ?? ''), (string)($_POST['email'] ?? ''));
+                try {
+                    Benutzer::einladen($id);
+                    $_SESSION['hinweis'] = 'Admin angelegt. Die Einladung mit dem Link zum Passwort-Setzen ist per E-Mail unterwegs.';
+                } catch (RuntimeException $e) {
+                    $_SESSION['fehler'] = 'Admin angelegt, aber die Einladung konnte nicht verschickt werden: ' . $e->getMessage();
+                }
+            } catch (InvalidArgumentException $e) {
+                $_SESSION['fehler'] = $e->getMessage();
+            }
+            weiter('/admin/admins');
+        }
+        if (preg_match('#^/admin/admins/(\d+)/(einladen|loeschen)$#', $pfad, $m) && $methode === 'POST') {
+            csrf_pruefen();
+            $id = (int)$m[1];
+            if ($m[2] === 'loeschen') {
+                if ($id === ($_SESSION['benutzer_id'] ?? null)) {
+                    $_SESSION['fehler'] = 'Du kannst dich nicht selbst entfernen.';
+                } else {
+                    Benutzer::loeschen($id);
+                    $_SESSION['hinweis'] = 'Admin entfernt.';
+                }
+            } else {
+                try {
+                    Benutzer::einladen($id);
+                    $_SESSION['hinweis'] = 'Neuer Link per E-Mail verschickt.';
+                } catch (Throwable $e) {
+                    $_SESSION['fehler'] = 'E-Mail konnte nicht verschickt werden: ' . $e->getMessage();
+                }
+            }
+            weiter('/admin/admins');
         }
 
         if ($pfad === '/admin' && $methode === 'GET') {

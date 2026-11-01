@@ -88,5 +88,41 @@ echo "Bereichsvorschlag\n";
 pruefe(Heft::bereichVorschlag('27-40811') === 'Strömungsrettung & Hochwasser', '408xx → Strömungsrettung');
 pruefe(Heft::bereichVorschlag('LV-Rat 2-26', 'LV Rat 2 2026') === 'Tagungen & Gremien', 'LV-Rat → Tagungen');
 
+echo "Admins und Passwort-Links\n";
+Mailer::$abfangen = [];
+$id = Benutzer::anlegen('Anna Beispiel', ' Anna@Example.org ');
+pruefe(Benutzer::finde($id)['email'] === 'anna@example.org', 'E-Mail wird normalisiert');
+try { Benutzer::anlegen('Doppelt', 'anna@example.org'); pruefe(false, 'Doppelte E-Mail abgelehnt'); }
+catch (InvalidArgumentException) { pruefe(true, 'Doppelte E-Mail abgelehnt'); }
+pruefe(Benutzer::anmelden('anna@example.org', 'irgendwas') === null, 'Ohne Passwort keine Anmeldung');
+Benutzer::einladen($id);
+$mail = Mailer::$abfangen[0] ?? null;
+pruefe($mail && $mail['an'] === 'anna@example.org' && str_contains($mail['text'], '/admin/passwort-setzen?token='), 'Einladungs-Mail mit Link');
+preg_match('/token=([a-f0-9]{64})/', $mail['text'] ?? '', $m); $token = $m[1] ?? '';
+pruefe((bool)Benutzer::tokenPruefen($token), 'Token aus der Mail ist gültig');
+pruefe((int)Db::pdo()->query("SELECT COUNT(*) FROM passwort_token WHERE token_hash='$token'")->fetchColumn() === 0, 'Token wird nur gehasht gespeichert');
+try { Benutzer::passwortSetzen($token, 'kurz', 'kurz'); pruefe(false, 'Zu kurzes Passwort abgelehnt'); }
+catch (InvalidArgumentException) { pruefe(true, 'Zu kurzes Passwort abgelehnt'); }
+try { Benutzer::passwortSetzen($token, 'lang-genug-123', 'anders-123456'); pruefe(false, 'Ungleiche Passwörter abgelehnt'); }
+catch (InvalidArgumentException) { pruefe(true, 'Ungleiche Passwörter abgelehnt'); }
+Benutzer::passwortSetzen($token, 'lang-genug-123', 'lang-genug-123');
+pruefe(Benutzer::anmelden('ANNA@example.org', 'lang-genug-123')['id'] === $id, 'Anmeldung mit neuem Passwort (Groß/klein egal)');
+pruefe(Benutzer::tokenPruefen($token) === null, 'Link ist danach verbraucht');
+
+Mailer::$abfangen = [];
+Db::pdo()->exec('UPDATE passwort_token SET erstellt = 0');
+Benutzer::passwortVergessen('gibt-es-nicht@example.org');
+pruefe(count(Mailer::$abfangen) === 0, 'Unbekannte Adresse: keine Mail');
+Benutzer::passwortVergessen('anna@example.org');
+pruefe(count(Mailer::$abfangen) === 1, 'Passwort vergessen: Mail verschickt');
+Benutzer::passwortVergessen('anna@example.org');
+pruefe(count(Mailer::$abfangen) === 1, 'Zweite Anfrage innerhalb 5 Minuten: keine weitere Mail');
+Db::pdo()->exec('UPDATE passwort_token SET gueltig_bis = 1');
+preg_match('/token=([a-f0-9]{64})/', Mailer::$abfangen[0]['text'], $m);
+pruefe(Benutzer::tokenPruefen($m[1]) === null, 'Abgelaufener Link wird abgelehnt');
+Benutzer::loeschen($id);
+pruefe(Benutzer::anmelden('anna@example.org', 'lang-genug-123') === null, 'Entfernter Admin kann sich nicht mehr anmelden');
+Mailer::$abfangen = null;
+
 echo "\n$tests Prüfungen, $fehler fehlgeschlagen.\n";
 exit($fehler ? 1 : 0);

@@ -17,14 +17,7 @@ $bereiche = config('bereiche');
 <link rel="stylesheet" href="/assets/admin.css?v=<?= e((string)@filemtime(APP_ROOT . '/public/assets/admin.css')) ?>">
 </head>
 <body>
-<header class="kopf">
-  <div class="bb"><span>LV Baden · Lehrgangsheft</span><img src="/assets/wortmarke.svg" alt="DLRG"></div>
-  <nav>
-    <a href="/" target="_blank" rel="noopener">Heft ansehen</a>
-    <a href="/heft.pdf" target="_blank" rel="noopener">Heft-PDF</a>
-    <form method="post" action="/admin/logout"><input type="hidden" name="csrf" value="<?= e($csrf) ?>"><button class="link">Abmelden (<?= e($admin) ?>)</button></form>
-  </nav>
-</header>
+<?php $aktiv = 'lehrgaenge'; require APP_ROOT . '/views/_kopf.php'; ?>
 
 <main>
   <?php if ($hinweis): ?><p class="hinweis" role="status"><?= e($hinweis) ?></p><?php endif; ?>

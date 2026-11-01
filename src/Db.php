@@ -50,6 +50,21 @@ final class Db
                 erstmals        TEXT NOT NULL,
                 zuletzt         TEXT NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS benutzer (
+                id             INTEGER PRIMARY KEY AUTOINCREMENT,
+                name           TEXT NOT NULL,
+                email          TEXT NOT NULL UNIQUE,
+                passwort_hash  TEXT,                  -- NULL, solange die Einladung nicht angenommen ist
+                aktiv          INTEGER NOT NULL DEFAULT 1,
+                erstellt       TEXT NOT NULL,
+                letzter_login  TEXT
+            );
+            CREATE TABLE IF NOT EXISTS passwort_token (
+                token_hash   TEXT PRIMARY KEY,         -- nur der SHA-256-Hash wird gespeichert
+                benutzer_id  INTEGER NOT NULL,
+                gueltig_bis  INTEGER NOT NULL,
+                erstellt     INTEGER NOT NULL
+            );
             CREATE TABLE IF NOT EXISTS sync_log (
                 id        INTEGER PRIMARY KEY AUTOINCREMENT,
                 start     TEXT NOT NULL,

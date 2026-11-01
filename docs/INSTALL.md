@@ -75,6 +75,7 @@ chown -R www-data:www-data storage
   ],
   ```
 
+- `mail`: Postfach für Einladungen und „Passwort vergessen“ (siehe Abschnitt „Admins“ unten).
 - `kontakt`: steht auf der Kontaktseite im Heft.
 - `bereiche` / `bereich_nach_nummer`: Reihenfolge der Kapitel und automatische Zuordnung nach Lehrgangsnummer.
   Jeder Lehrgang kann im Admin-Bereich auch von Hand einem Bereich zugeordnet werden.
@@ -154,6 +155,29 @@ Im Admin-Bereich:
 
 Lehrgänge, die von baden.dlrg.de verschwinden, werden automatisch aus dem Heft genommen.
 Kurse mit erreichtem Meldeschluss stehen im Anhang statt mit eigener Doppelseite.
+
+## Admins
+
+Admins melden sich mit **E-Mail-Adresse und Passwort** an. Unter **Admin-Bereich → Admins**:
+
+- **Einladen:** Name und E-Mail eintragen. Die Person bekommt einen Link (48 Stunden gültig) und legt ihr Passwort selbst fest.
+- **Passwort vergessen?** auf der Anmeldeseite schickt einen Link, der 1 Stunde gilt und nur einmal funktioniert.
+- **Entfernen:** zweimal auf „Entfernen“ klicken. Sich selbst kann man nicht entfernen.
+
+Der Eintrag unter `admins` in `config.php` bleibt ein **Notfallzugang** (Benutzername statt E-Mail), falls der Mailversand ausfällt.
+
+Damit Mails rausgehen, in `config.php` den Abschnitt `mail` ausfüllen:
+
+| Anbieter | host | port | verschluesselung | passwort |
+|---|---|---|---|---|
+| IONOS | smtp.ionos.de | 587 | tls | Passwort des Postfachs |
+| Google Workspace | smtp.gmail.com | 587 | tls | App-Passwort des Kontos |
+
+Testmail an dich selbst:
+
+```bash
+php -r 'require "src/bootstrap.php"; Mailer::senden("deine@adresse.de", "Test Lehrgangsheft", "Mailversand funktioniert."); echo "ok\n";'
+```
 
 ---
 
