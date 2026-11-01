@@ -57,7 +57,7 @@
   page(1, 'cover', `${BB}<img class="adler" src="${A}adler.png" alt="">
    <div class="txt"><div class="eyebrow">Aus- und Fortbildung</div>
     <div class="big">Lehrgänge</div><div class="yr">${esc(JAHR)}</div>
-    <p class="sub">Seminarheft des Landesverbands Baden – ${order.length === 1 ? 'ein Lehrgang' : order.length + ' Lehrgänge und Tagungen'} mit Inhalten, Terminen, Voraussetzungen und QR-Code zur Anmeldung.</p></div>
+    <p class="sub">Seminarheft des Landesverbands Baden – mit Inhalten, Terminen, Voraussetzungen und QR-Code zur Anmeldung.</p></div>
    <div class="claim"><img src="${A}claim.svg" alt="Wasser lieben – Leben retten. DLRG"></div>`);
 
   // 2 Anmeldung
@@ -235,8 +235,12 @@
       pf = new St.PageFlip(book, {
         width: 420, height: 594, size: 'stretch', minWidth: 260, maxWidth: 620, minHeight: 368, maxHeight: 877,
         showCover: true, usePortrait: true, autoSize: true, maxShadowOpacity: .35, mobileScrollSupport: false, flippingTime: 650,
-        startPage: startIdx(), disableFlipByClick: true
+        startPage: startIdx(), disableFlipByClick: true, showPageCorners: false
       });
+      // Links und Knöpfe auf den Seiten bekommen Maus/Touch selbst – die Blätterfunktion sieht sie nicht
+      ['mousedown', 'touchstart', 'pointerdown'].forEach(t => book.addEventListener(t, e => {
+        if (e.target.closest('a, button, select, input')) e.stopPropagation();
+      }, true));
       pf.loadFromHTML(els);
       pf.on('flip', e => { cur = e.data; pgl.textContent = label(cur); setHash(cur); });
       cur = pf.getCurrentPageIndex(); pgl.textContent = label(cur);

@@ -80,25 +80,26 @@ a{color:var(--red-deep)}
 
 /* Cover & Rückseite nach DLRG-CD: rote Bauchbinde oben ("LV Baden" + Wortmarke), Adler im Anschnitt, Claim-Feld, DLRG-Wasserzeichen */
 .cover .pc,.back .pc{padding:0;gap:0;background:var(--paper)}
-.bb{position:absolute;left:0;right:0;top:7cqh;height:6.6cqw;background:var(--red);display:flex;align-items:center;justify-content:space-between;padding:0 5.5cqw;z-index:2}
-.bb span{font-family:var(--f-display);font-weight:700;color:var(--yellow);font-size:3.6cqw;line-height:1}
-.bb img{height:3.9cqw;width:auto;display:block;max-width:none}
+/* Bauchbinde: 1/10 der Seitenhöhe, darunter derselbe Abstand zum Seitenrand */
+.bb{position:absolute;left:0;right:0;bottom:10cqh;height:10cqh;background:var(--red);display:flex;align-items:center;justify-content:space-between;padding:0 6cqw;z-index:2}
+.bb span{font-family:var(--f-display);font-weight:700;color:var(--yellow);font-size:3.6cqh;line-height:1}
+.bb img{height:3.6cqh;width:auto;display:block;max-width:none}
 .cover .adler{position:absolute;right:-31cqw;bottom:-3cqh;width:104cqw;height:auto;max-width:none;pointer-events:none;opacity:.17}
-.cover .txt{position:relative;z-index:1;padding:31cqh 8cqw 0;display:flex;flex-direction:column;gap:.5em;max-width:78%}
+.cover .txt{position:relative;z-index:1;padding:13cqh 8cqw 0;display:flex;flex-direction:column;gap:.5em;max-width:78%}
 .cover .eyebrow{font-family:var(--f-display);font-weight:700;font-size:1.05em;letter-spacing:.12em;text-transform:uppercase;color:var(--grau)}
 .cover .big{font-family:var(--f-display);font-weight:700;font-size:5.6em;line-height:.95;color:var(--red);letter-spacing:-.02em}
 .cover .yr{font-family:var(--f-display);font-weight:700;font-size:2.9em;line-height:1;color:var(--grau)}
 .cover .sub{margin:.6em 0 0;color:var(--grau);font-size:1.02em;max-width:22em}
-.cover .claim{position:absolute;left:0;bottom:8cqh;width:56cqw;background:var(--red);padding:4cqw 5cqw 4.4cqw 8cqw;z-index:1}
+.cover .claim{position:absolute;left:0;bottom:24cqh;width:56cqw;background:var(--red);padding:4cqw 5cqw 4.4cqw 8cqw;z-index:1}
 .cover .claim img{width:100%;height:auto;display:block}
 .back .pc{background:var(--hell)}
-.back .top{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:1em;padding:24cqh 8cqw 22cqh}
+.back .top{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:1em;padding:14cqh 8cqw 24cqh}
 .back .big{font-family:var(--f-display);font-weight:700;font-size:2.8em;line-height:1;color:var(--red);text-wrap:balance}
 .back .qrb{width:40%;border:.14em solid var(--ink);padding:.7em;background:#fff}
 .back .qrb svg{width:100%;display:block}
 .back p{margin:0;font-size:1.05em;color:var(--grau)}
 .back p b{color:var(--ink)}
-.back .wm{position:absolute;right:5.5cqw;bottom:5cqh;width:52cqw;opacity:.75}
+.back .wm{position:absolute;right:6cqw;top:6cqh;width:40cqw;opacity:.75}
 .back .wm img{width:100%;display:block}
 /* Übersichten */
 .toc{display:grid;gap:.9em}
