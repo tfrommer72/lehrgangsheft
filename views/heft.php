@@ -19,7 +19,7 @@ body{margin:0;font-size:14px}</style>
 <body data-modus="<?= e($modus) ?>" data-kurs="<?= (int)$kurs ?>" data-basis="/">
 <div class="shell">
   <div class="bar">
-    <div><h1>Seminarheft · DLRG Landesverband Baden</h1><p><?= $offen ?> Lehrgänge · Stand <?= e($daten['meta']['stand']) ?></p></div>
+    <div><h1>Seminarheft · DLRG Landesverband Baden</h1><p><?= $offen ?> <?= $offen === 1 ? 'Lehrgang' : 'Lehrgänge' ?> · Stand <?= e($daten['meta']['stand']) ?></p></div>
     <div class="nav">
       <button id="prev" type="button" aria-label="Zurückblättern">‹ Zurück</button>
       <span class="pgl" id="pgl" aria-live="polite">Titel</span>

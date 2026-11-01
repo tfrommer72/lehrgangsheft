@@ -54,6 +54,7 @@ $bereiche = config('bereiche');
         <button type="button" data-filter="aus">Nicht im Heft</button>
       </div>
       <button type="button" id="alleNeuen">Alle neuen anhaken</button>
+      <button type="button" id="alleOffenen" title="Alle Lehrgänge, bei denen der Meldeschluss noch nicht erreicht ist">Alle offenen anhaken</button>
       <button type="submit" class="primaer">Auswahl speichern</button>
     </div>
 
@@ -63,7 +64,7 @@ $bereiche = config('bereiche');
       <tbody>
       <?php foreach ($imListe as $z):
         $id = (int)$z['id']; $vorschlag = Heft::bereichVorschlag($z['nr'], $z['titel']); ?>
-        <tr data-neu="<?= (int)$z['neu'] ?>" data-frei="<?= (int)$z['freigegeben'] ?>">
+        <tr data-neu="<?= (int)$z['neu'] ?>" data-frei="<?= (int)$z['freigegeben'] ?>" data-offen="<?= Heft::istOffen($z['status']) ? 1 : 0 ?>">
           <td class="mitte">
             <input type="hidden" name="ids[]" value="<?= $id ?>">
             <input type="checkbox" id="f<?= $id ?>" name="frei[<?= $id ?>]" value="1" <?= (int)$z['freigegeben'] ? 'checked' : '' ?> aria-label="<?= e($z['titel']) ?> im Heft zeigen">
@@ -120,6 +121,10 @@ $bereiche = config('bereiche');
   }));
   document.getElementById('alleNeuen').addEventListener('click', () => {
     rows.filter(r => r.dataset.neu === '1').forEach(r => r.querySelector('input[type=checkbox]').checked = true);
+  });
+  document.getElementById('alleOffenen').addEventListener('click', () => {
+    rows.filter(r => r.dataset.offen === '1').forEach(r => r.querySelector('input[type=checkbox]').checked = true);
+    geaendert = true;
   });
   let geaendert = false;
   document.getElementById('auswahl').addEventListener('change', () => geaendert = true);

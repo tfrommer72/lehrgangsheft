@@ -57,7 +57,7 @@
   page(1, 'cover', `${BB}<img class="adler" src="${A}adler.png" alt="">
    <div class="txt"><div class="eyebrow">Aus- und Fortbildung</div>
     <div class="big">Lehrgänge</div><div class="yr">${esc(JAHR)}</div>
-    <p class="sub">Seminarheft des Landesverbands Baden – ${order.length} Lehrgänge und Tagungen mit Inhalten, Terminen, Voraussetzungen und QR-Code zur Anmeldung.</p></div>
+    <p class="sub">Seminarheft des Landesverbands Baden – ${order.length === 1 ? 'ein Lehrgang' : order.length + ' Lehrgänge und Tagungen'} mit Inhalten, Terminen, Voraussetzungen und QR-Code zur Anmeldung.</p></div>
    <div class="claim"><img src="${A}claim.svg" alt="Wasser lieben – Leben retten. DLRG"></div>`);
 
   // 2 Anmeldung
